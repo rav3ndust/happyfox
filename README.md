@@ -6,21 +6,15 @@
 
 **happyfox** is a fork of [uBlock Origin Lite](https://github.com/uBlockOrigin/uBOL-home). It is a **permissionless** content blocker based on the [MV3 API](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3).
 
-happyfox operates entirely declaratively, meaning no permanent process is required for filtering. The browser handles CSS/JS injection for content filtering, ensuring that happyfox does not consume CPU or memory resources while blocking content. The service worker process is only active when interacting with the popup panel or options pages.
+happyfox is all about keeping things simple, or should I say, declarative? No need for a brain-draining, resource-hogging process for filtering content here. The browser does the heavy lifting with CSS/JS injections, so happyfox just sits back, conserving that sweet CPU and memory for your actual browsing. The service worker only wakes up when you're playing with the popup panel or poking around in the options pages.
 
-happyfox does not require broad "read/modify data" [permissions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions) at install time, limiting its capabilities compared to uBlock Origin or other content blockers that need such permissions upfront.
+Now, about permissions - happyfox isn't the type to ask for the keys to your digital house right off the bat. Unlike some privacy-hungry blockers, it doesn't demand broad "read/modify data" permissions at install. This keeps things a bit more limited, but hey, privacy first, right?
 
-**However**, users can *explicitly* grant extended permissions for specific sites to enhance filtering using declarative cosmetic and scriptlet injections. 
+But, if you want happyfox to go full ninja mode on a specific site, you can totally grant it extra powers. Just pop open the panel, switch to '**Optimal**' or '**Complete**' mode, and the browser will give you the lowdown on what you're about to allow. You get to choose: give happyfox the green light or keep it on a tight leash.
 
-To grant permissions on a given site, open the popup panel and select a higher filtering mode like **Optimal** or **Complete**.
+If you decide to let happyfox loose, it'll do a stellar job filtering content on that page. And if you're feeling adventurous, you can set 'Optimal' or 'Complete' as your default mode in the options page - just remember, that means giving happyfox permission to read and modify data across all websites.
 
-The browser will alert you to the implications of granting additional permissions, and you must decide whether to accept or decline.
-
-If you accept the request, happyfox can better filter content on the current site.
-
-You can set the default filtering mode from happyfox's options page. If you choose **Optimal** or **Complete** as the default, you will need to grant happyfox permission to modify and read data on all websites.
-
-The default ruleset includes at least uBlock Origin's default filter set:
+Our default filter set? It's nothing less than the best from uBlock Origin:
 
 - uBlock Origin's built-in filter lists
 - EasyList
