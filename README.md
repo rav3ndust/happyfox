@@ -4,7 +4,7 @@
 
 ## Description
 
-**happyfox** is a fork of [uBlock Origin Lite](https://github.com/uBlockOrigin/uBOL-home) is a **permissionless** content blocker based on the [MV3 API](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3).
+**happyfox** is a fork of [uBlock Origin Lite](https://github.com/uBlockOrigin/uBOL-home). It is a **permissionless** content blocker based on the [MV3 API](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3).
 
 happyfox operates entirely declaratively, meaning no permanent process is required for filtering. The browser handles CSS/JS injection for content filtering, ensuring that uBOL does not consume CPU or memory resources while blocking content. The service worker process is only active when interacting with the popup panel or options pages.
 
