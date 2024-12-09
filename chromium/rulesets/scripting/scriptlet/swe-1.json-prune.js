@@ -41,7 +41,7 @@ const scriptletGlobals = {}; // eslint-disable-line
 
 const argsList = [["autoplay"],["payload.ads campaigns.*"]];
 
-const hostnamesMap = new Map([["expressen.se",0],["di.se",0],["nsk.se",0],["skd.se",0],["nvp.se",0],["nuiosteraker.se",0],["barometern.se",0],["blt.se",0],["bt.se",0],["kristianstadsbladet.se",0],["olandsbladet.se",0],["smp.se",0],["sydostran.se",0],["trelleborgsallehanda.se",0],["ut.se",0],["ystadsallehanda.se",0],["corren.se",0],["folkbladet.se",0],["mvt.se",0],["nt.se",0],["vt.se",0],["klt.nu",0],["vimmerbytidning.se",0],["kuriren.nu",0],["nsd.se",0],["norran.se",0],["pt.se",0],["ekuriren.se",0],["strengnastidning.se",0],["kkuriren.se",0],["sn.se",0],["eposten.se",0],["unt.se",0],["helagotland.se",0],["folkbladet.nu",0],["vk.se",0],["vasterbottningen.se",0],["mellanbygden.nu",0],["nordsverige.se",0],["lokaltidningen.nu",0],["vasterastidning.se",0],["mitti.se",0],["thelocal.se",0],["byrum.se",0],["sverigespringer.se",0],["recept.se",0],["viivilla.se",0],["mestmotor.se",0],["babyhjalp.se",0],["fragbite.se",0],["ibnytt.se",0],["realtid.se",0],["cafe.se",0],["kingmagazine.se",0],["vxonews.se",0],["vaxjobladet.se",0],["alekuriren.se",0],["nyheter24.se",0],["svenskgolf.se",0],["golfing.se",0],["familjeliv.se",0],["praktisktbatagande.se",0],["norrahalland.se",0],["lokalti.se",0],["lchfarkivet.se",0],["alltforforaldrar.se",0],["idrottensaffarer.se",0],["vf.se",0],["hjotidning.se",0],["kt.se",0],["kt-kuriren.se",0],["sla.se",0],["mariestadstidningen.se",0],["filipstadstidning.se",0],["fryksdalsbygden.se",0],["nwt.se",0],["arvikanyheter.se",0],["nkp.se",0],["saffletidningen.se",0],["provinstidningen.se",0],["dalslanningen.se",0],["nlt.se",0],["skaraborgsbygden.se",0],["matspar.se",1]]);
+const hostnamesMap = new Map([["expressen.se",0],["di.se",0],["nsk.se",0],["skd.se",0],["nvp.se",0],["nuiosteraker.se",0],["barometern.se",0],["blt.se",0],["bt.se",0],["kristianstadsbladet.se",0],["olandsbladet.se",0],["smp.se",0],["sydostran.se",0],["trelleborgsallehanda.se",0],["ut.se",0],["ystadsallehanda.se",0],["corren.se",0],["folkbladet.se",0],["mvt.se",0],["nt.se",0],["vt.se",0],["klt.nu",0],["vimmerbytidning.se",0],["kuriren.nu",0],["nsd.se",0],["norran.se",0],["pt.se",0],["ekuriren.se",0],["strengnastidning.se",0],["kkuriren.se",0],["sn.se",0],["eposten.se",0],["unt.se",0],["helagotland.se",0],["folkbladet.nu",0],["vk.se",0],["vasterbottningen.se",0],["mellanbygden.nu",0],["nordsverige.se",0],["lokaltidningen.nu",0],["vasterastidning.se",0],["mitti.se",0],["thelocal.se",0],["byrum.se",0],["sverigespringer.se",0],["recept.se",0],["viivilla.se",0],["mestmotor.se",0],["babyhjalp.se",0],["fragbite.se",0],["ibnytt.se",0],["realtid.se",0],["cafe.se",0],["kingmagazine.se",0],["vaxjobladet.se",0],["alekuriren.se",0],["nyheter24.se",0],["svenskgolf.se",0],["golfing.se",0],["familjeliv.se",0],["praktisktbatagande.se",0],["norrahalland.se",0],["lokalti.se",0],["lchfarkivet.se",0],["alltforforaldrar.se",0],["idrottensaffarer.se",0],["vf.se",0],["hjotidning.se",0],["kt.se",0],["kt-kuriren.se",0],["sla.se",0],["mariestadstidningen.se",0],["filipstadstidning.se",0],["fryksdalsbygden.se",0],["nwt.se",0],["arvikanyheter.se",0],["nkp.se",0],["saffletidningen.se",0],["provinstidningen.se",0],["dalslanningen.se",0],["nlt.se",0],["skaraborgsbygden.se",0],["matspar.se",1]]);
 
 const entitiesMap = new Map([]);
 
@@ -89,11 +89,12 @@ function objectPruneFn(
     extraArgs = {}
 ) {
     if ( typeof rawPrunePaths !== 'string' ) { return; }
+    const safe = safeSelf();
     const prunePaths = rawPrunePaths !== ''
-        ? rawPrunePaths.split(/ +/)
+        ? safe.String_split.call(rawPrunePaths, / +/)
         : [];
     const needlePaths = prunePaths.length !== 0 && rawNeedlePaths !== ''
-        ? rawNeedlePaths.split(/ +/)
+        ? safe.String_split.call(rawNeedlePaths, / +/)
         : [];
     if ( stackNeedleDetails.matchAll !== true ) {
         if ( matchesStackTrace(stackNeedleDetails, extraArgs.logstack) === false ) {
@@ -146,6 +147,7 @@ function safeSelf() {
         'RegExp_exec': self.RegExp.prototype.exec,
         'Request_clone': self.Request.prototype.clone,
         'String_fromCharCode': String.fromCharCode,
+        'String_split': String.prototype.split,
         'XMLHttpRequest': self.XMLHttpRequest,
         'addEventListener': self.EventTarget.prototype.addEventListener,
         'removeEventListener': self.EventTarget.prototype.removeEventListener,
@@ -321,7 +323,7 @@ function matchesStackTrace(
     // Normalize stack trace
     const reLine = /(.*?@)?(\S+)(:\d+):\d+\)?$/;
     const lines = [];
-    for ( let line of error.stack.split(/[\n\r]+/) ) {
+    for ( let line of safe.String_split.call(error.stack, /[\n\r]+/) ) {
         if ( line.includes(exceptionToken) ) { continue; }
         line = line.trim();
         const match = safe.RegExp_exec.call(reLine, line);

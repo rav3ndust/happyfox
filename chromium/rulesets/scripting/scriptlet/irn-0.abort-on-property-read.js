@@ -39,9 +39,9 @@ const uBOL_abortOnPropertyRead = function() {
 
 const scriptletGlobals = {}; // eslint-disable-line
 
-const argsList = [["nocontext"],["vc_url"],["show_wpcp_message"],["tinPa"],["SGPB_POPUP_PARAMS"],["needpop"],["window.LOCO_DATA.copyrightTranslation"]];
+const argsList = [["nocontext"],["vc_url"],["show_wpcp_message"],["fixedPostGroups"],["tinPa"],["SGPB_POPUP_PARAMS"],["needpop"],["window.LOCO_DATA.copyrightTranslation"]];
 
-const hostnamesMap = new Map([["coffeeapps.ir",0],["p30konkor.com",0],["sclinic.ir",0],["nab-music.com",1],["shahanmusic.ir",2],["tinroid.ir",3],["tak3da.com",4],["yeknet.ir",5],["oila.tj",6]]);
+const hostnamesMap = new Map([["coffeeapps.ir",0],["p30konkor.com",0],["sclinic.ir",0],["nab-music.com",1],["shahanmusic.ir",2],["saednews.com",3],["tinroid.ir",4],["tak3da.com",5],["yeknet.ir",6],["oila.tj",7]]);
 
 const entitiesMap = new Map([]);
 
@@ -132,6 +132,7 @@ function safeSelf() {
         'RegExp_exec': self.RegExp.prototype.exec,
         'Request_clone': self.Request.prototype.clone,
         'String_fromCharCode': String.fromCharCode,
+        'String_split': String.prototype.split,
         'XMLHttpRequest': self.XMLHttpRequest,
         'addEventListener': self.EventTarget.prototype.addEventListener,
         'removeEventListener': self.EventTarget.prototype.removeEventListener,

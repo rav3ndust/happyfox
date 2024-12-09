@@ -39,9 +39,9 @@ const uBOL_setCookie = function() {
 
 const scriptletGlobals = {}; // eslint-disable-line
 
-const argsList = [["exit-intent","true"],["cp_style_3841","true"],["m6e-newsletter","1"],["awpopup_501941328","1"],["popup_closed","true"],["SuppressInterstitial","true","","reload","1"],["marketing-modal-closed-1","2"],["r_p_s_n","1"],["viewedOuibounceModal","true"],["hidePopUp","true"],["newsletter","true"],["isNewsletterPopupShown","false","","reload","1"],["mailerlite:forms:shown:109925949413262377","1"],["pum-276000","true"],["uf_signup_bar","1"],["client-mailingListModalShown","true"],["jetpack_post_subscribe_modal_dismissed","true"],["newsletterLightboxDisplayed","true"],["MCPopupClosed","yes"],["welcome_modal_email_ts","1"],["newsletter-newsletter-popup","true"],["Columbia_IT_emailPopup","1"],["Columbia_AT_emailPopup","1"],["Columbia_DE_emailPopup","1"],["Columbia_FR_emailPopup","1"],["Columbia_ES_emailPopup","1"],["Columbia_UK_emailPopup","1"],["mystery_popup","true"],["sws-gwpop","1"],["popup-newsletter","true"],["logged_in","1","","reload","1"],["ezgwcc","1"]];
+const argsList = [["exit-intent","true"],["cp_style_3841","true"],["m6e-newsletter","1"],["awpopup_450030403","1"],["popupShown","true"],["awpopup_501941328","1"],["popup_closed","true"],["email_modal","true"],["SuppressInterstitial","true","","reload","1"],["marketing-modal-closed-1","2"],["r_p_s_n","1"],["viewedOuibounceModal","true"],["hidePopUp","true"],["newsletter","true"],["isNewsletterPopupShown","false","","reload","1"],["mailerlite:forms:shown:109925949413262377","1"],["pum-276000","true"],["uf_signup_bar","1"],["client-mailingListModalShown","true"],["jetpack_post_subscribe_modal_dismissed","true"],["newsletterLightboxDisplayed","true"],["MCPopupClosed","yes"],["welcome_modal_email_ts","1"],["newsletter-newsletter-popup","true"],["Columbia_IT_emailPopup","1"],["Columbia_AT_emailPopup","1"],["Columbia_DE_emailPopup","1"],["Columbia_FR_emailPopup","1"],["Columbia_ES_emailPopup","1"],["Columbia_UK_emailPopup","1"],["mystery_popup","true"],["sws-gwpop","1"],["popup-newsletter","true"],["logged_in","1","","reload","1"],["ezgwcc","1"],["_ad","0"]];
 
-const hostnamesMap = new Map([["monarchmoney.com",0],["railsnotes.xyz",0],["breachmedia.ca",1],["artribune.com",2],["oled-info.com",3],["lowpass.cc",4],["readergrev.com",4],["objectivebayesian.com",4],["monopoly.marketecture.tv",4],["jointhefollowup.com",4],["gourmetfoodstore.com",5],["theinformation.com",6],["in.investing.com",7],["intellinews.com",8],["kermitlynch.com",9],["jingdaily.com",10],["babiesrus.ca",11],["toysrus.ca",11],["clevercreations.org",12],["thefederalist.com",13],["30seconds.com",14],["iconduck.com",15],["shojiwax.com",16],["skepticalraptor.com",16],["girlscoutshop.com",17],["yvonnebennetti.com",18],["funko.com",19],["loungefly.com",19],["saucerco.com",20],["columbiasportswear.it",21],["columbiasportswear.at",22],["columbiasportswear.de",23],["columbiasportswear.fr",24],["columbiasportswear.es",25],["columbiasportswear.co.uk",26],["sharperimage.com",27],["sweetwater.com",28],["assos.com",29],["tumblr.com",30],["scitechdaily.com",31]]);
+const hostnamesMap = new Map([["monarchmoney.com",0],["railsnotes.xyz",0],["breachmedia.ca",1],["artribune.com",2],["plantpowercouple.com",3],["commondreams.org",4],["oled-info.com",5],["lowpass.cc",6],["readergrev.com",6],["objectivebayesian.com",6],["monopoly.marketecture.tv",6],["jointhefollowup.com",6],["streamily.com",7],["gourmetfoodstore.com",8],["theinformation.com",9],["in.investing.com",10],["intellinews.com",11],["kermitlynch.com",12],["jingdaily.com",13],["babiesrus.ca",14],["toysrus.ca",14],["clevercreations.org",15],["thefederalist.com",16],["30seconds.com",17],["iconduck.com",18],["shojiwax.com",19],["skepticalraptor.com",19],["girlscoutshop.com",20],["yvonnebennetti.com",21],["funko.com",22],["loungefly.com",22],["saucerco.com",23],["columbiasportswear.it",24],["columbiasportswear.at",25],["columbiasportswear.de",26],["columbiasportswear.fr",27],["columbiasportswear.es",28],["columbiasportswear.co.uk",29],["sharperimage.com",30],["sweetwater.com",31],["assos.com",32],["tumblr.com",33],["scitechdaily.com",34],["klsescreener.com",35]]);
 
 const entitiesMap = new Map([]);
 
@@ -127,6 +127,7 @@ function safeSelf() {
         'RegExp_exec': self.RegExp.prototype.exec,
         'Request_clone': self.Request.prototype.clone,
         'String_fromCharCode': String.fromCharCode,
+        'String_split': String.prototype.split,
         'XMLHttpRequest': self.XMLHttpRequest,
         'addEventListener': self.EventTarget.prototype.addEventListener,
         'removeEventListener': self.EventTarget.prototype.removeEventListener,
@@ -351,7 +352,8 @@ function setCookieFn(
 function getCookieFn(
     name = ''
 ) {
-    for ( const s of document.cookie.split(/\s*;\s*/) ) {
+    const safe = safeSelf();
+    for ( const s of safe.String_split.call(document.cookie, /\s*;\s*/) ) {
         const pos = s.indexOf('=');
         if ( pos === -1 ) { continue; }
         if ( s.slice(0, pos) !== name ) { continue; }

@@ -41,15 +41,24 @@ import {
 } from './ext.js';
 
 import {
+    adminReadEx,
+    getAdminRulesets,
+} from './admin.js';
+
+import {
     enableRulesets,
+    excludeFromStrictBlock,
     getEnabledRulesetsDetails,
     getRulesetDetails,
+    patchDefaultRulesets,
+    setStrictBlockMode,
     updateDynamicRules,
 } from './ruleset-manager.js';
 
 import {
     getMatchedRules,
     isSideloaded,
+    toggleDeveloperMode,
     ubolLog,
 } from './debug.js';
 
@@ -61,7 +70,6 @@ import {
 } from './config.js';
 
 import { broadcastMessage } from './utils.js';
-import { getAdminRulesets } from './admin.js';
 import { registerInjectables } from './scripting-manager.js';
 
 /******************************************************************************/
@@ -188,6 +196,7 @@ function onMessage(request, sender, callback) {
             getRulesetDetails(),
             dnr.getEnabledRulesets(),
             getAdminRulesets(),
+            adminReadEx('disabledFeatures'),
         ]).then(results => {
             const [
                 defaultFilteringMode,
@@ -195,6 +204,7 @@ function onMessage(request, sender, callback) {
                 rulesetDetails,
                 enabledRulesets,
                 adminRulesets,
+                disabledFeatures,
             ] = results;
             callback({
                 defaultFilteringMode,
@@ -206,7 +216,11 @@ function onMessage(request, sender, callback) {
                 autoReload: rulesetConfig.autoReload,
                 showBlockedCount: rulesetConfig.showBlockedCount,
                 canShowBlockedCount,
+                strictBlockMode: rulesetConfig.strictBlockMode,
                 firstRun: process.firstRun,
+                isSideloaded,
+                developerMode: rulesetConfig.developerMode,
+                disabledFeatures,
             });
             process.firstRun = false;
         });
@@ -234,12 +248,28 @@ function onMessage(request, sender, callback) {
         });
         return true;
 
+    case 'setStrictBlockMode':
+        setStrictBlockMode(request.state).then(( ) => {
+            callback();
+            broadcastMessage({ strictBlockMode: rulesetConfig.strictBlockMode });
+        });
+        return true;
+
+    case 'setDeveloperMode':
+        rulesetConfig.developerMode = request.state;
+        toggleDeveloperMode(rulesetConfig.developerMode);
+        saveRulesetConfig().then(( ) => {
+            callback();
+        });
+        return true;
+
     case 'popupPanelData': {
         Promise.all([
             getFilteringMode(request.hostname),
             hasOmnipotence(),
             hasGreatPowers(request.origin),
             getEnabledRulesetsDetails(),
+            adminReadEx('disabledFeatures'),
         ]).then(results => {
             callback({
                 level: results[0],
@@ -248,6 +278,8 @@ function onMessage(request, sender, callback) {
                 hasGreatPowers: results[2],
                 rulesetDetails: results[3],
                 isSideloaded,
+                developerMode: rulesetConfig.developerMode,
+                disabledFeatures: results[4],
             });
         });
         return true;
@@ -314,6 +346,13 @@ function onMessage(request, sender, callback) {
         });
         return true;
 
+    case 'excludeFromStrictBlock': {
+        excludeFromStrictBlock(request.hostname, request.permanent).then(( ) => {
+            callback();
+        });
+        return true;
+    }
+
     case 'getMatchedRules':
         getMatchedRules(request.tabId).then(entries => {
             callback(entries);
@@ -339,20 +378,24 @@ function onMessage(request, sender, callback) {
 async function start() {
     await loadRulesetConfig();
 
-    if ( process.wakeupRun === false ) {
-        await enableRulesets(rulesetConfig.enabledRulesets);
+    const currentVersion = getCurrentVersion();
+    const isNewVersion = currentVersion !== rulesetConfig.version;
+
+    // The default rulesets may have changed, find out new ruleset to enable,
+    // obsolete ruleset to remove.
+    if ( isNewVersion ) {
+        ubolLog(`Version change: ${rulesetConfig.version} => ${currentVersion}`);
+        rulesetConfig.version = currentVersion;
+        await patchDefaultRulesets();
+        saveRulesetConfig();
     }
 
+    const rulesetsUpdated = process.wakeupRun === false &&
+        await enableRulesets(rulesetConfig.enabledRulesets);
+
     // We need to update the regex rules only when ruleset version changes.
-    if ( process.wakeupRun === false ) {
-        const currentVersion = getCurrentVersion();
-        if ( currentVersion !== rulesetConfig.version ) {
-            ubolLog(`Version change: ${rulesetConfig.version} => ${currentVersion}`);
-            updateDynamicRules().then(( ) => {
-                rulesetConfig.version = currentVersion;
-                saveRulesetConfig();
-            });
-        }
+    if ( isNewVersion && rulesetsUpdated === false ) {
+        updateDynamicRules();
     }
 
     // Permissions may have been removed while the extension was disabled
@@ -401,6 +444,13 @@ async function start() {
         } else {
             process.firstRun = false;
         }
+    }
+
+    toggleDeveloperMode(rulesetConfig.developerMode);
+
+    // Required to ensure the up to date property is available when needed
+    if ( process.wakeupRun === false ) {
+        adminReadEx('disabledFeatures');
     }
 }
 

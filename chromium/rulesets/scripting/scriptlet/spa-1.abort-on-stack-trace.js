@@ -39,11 +39,11 @@ const uBOL_abortOnStackTrace = function() {
 
 const scriptletGlobals = {}; // eslint-disable-line
 
-const argsList = [["alert","eval"],["history.go","eval"],["JSON.parse","showPopup"]];
+const argsList = [["document.open","eval"],["alert","eval"],["history.go","eval"],["JSON.parse","showPopup"]];
 
-const hostnamesMap = new Map([["netcine3.la",[0,1]],["toonscrab.com",2]]);
+const hostnamesMap = new Map([["cursomecanet.com",0],["netcine3.la",[1,2]],["toonscrab.com",3]]);
 
-const entitiesMap = new Map([["netcine",[0,1]]]);
+const entitiesMap = new Map([["netcine",[1,2]]]);
 
 const exceptionsMap = new Map([]);
 
@@ -125,7 +125,7 @@ function matchesStackTrace(
     // Normalize stack trace
     const reLine = /(.*?@)?(\S+)(:\d+):\d+\)?$/;
     const lines = [];
-    for ( let line of error.stack.split(/[\n\r]+/) ) {
+    for ( let line of safe.String_split.call(error.stack, /[\n\r]+/) ) {
         if ( line.includes(exceptionToken) ) { continue; }
         line = line.trim();
         const match = safe.RegExp_exec.call(reLine, line);
@@ -182,6 +182,7 @@ function safeSelf() {
         'RegExp_exec': self.RegExp.prototype.exec,
         'Request_clone': self.Request.prototype.clone,
         'String_fromCharCode': String.fromCharCode,
+        'String_split': String.prototype.split,
         'XMLHttpRequest': self.XMLHttpRequest,
         'addEventListener': self.EventTarget.prototype.addEventListener,
         'removeEventListener': self.EventTarget.prototype.removeEventListener,
