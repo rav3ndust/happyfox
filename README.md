@@ -4,7 +4,7 @@
 
 ## Description
 
-**happyfox** is a fork of [uBlock Origin Lite](https://github.com/uBlockOrigin/uBOL-home). It is a **permissionless** content blocker based on the [MV3 API](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3).
+**happyfox** is a fork of [uBlock Origin Lite](https://github.com/uBlockOrigin/uBOL-home) (also referred to as 'uBOL' in this readme, for short). It is a **permissionless** content blocker based on the [MV3 API](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3).
 
 happyfox is all about keeping things simple, or should I say, declarative? No need for a brain-draining, resource-hogging process for filtering content here. The browser does the heavy lifting with CSS/JS injections, so happyfox just sits back, conserving that sweet CPU and memory for your actual browsing. The service worker only wakes up when you're playing with the popup panel or poking around in the options pages.
 
@@ -34,6 +34,15 @@ This fork is brand new and something I'll be working on getting added into the a
 ### changes from uBOL
 
 happyfox will remain as close as possible to the original uBOL, though some new features may be added in, in the future. The aesthetics will look a little different, too. If you're on a clean page with no ads and trackers detected, you will see a smiling fox icon. If ads and trackers *are* detected on the page, you will notice your extension changes to a frowning fox icon. This is a fun way to add some expressiveness to the extension.
+
+### why 'happyfox'?
+
+Because: 
+
+- When we block ads and trackers in our browser, it makes us happy
+- Because it's for firefox!
+
+*happy* + *fox* = **happyfox**! :) 
 
 ### credits
 
